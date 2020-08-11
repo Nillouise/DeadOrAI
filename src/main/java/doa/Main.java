@@ -1,35 +1,35 @@
 package doa;
 
+import game.entity.World;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        final Model model = new Model();
+        final World world = new World();
+        final Model model = new Model(world);
+        final View view = new View(model, world);
+        final MouseController controller = new MouseController(model);//新增
 
-        final View view = new View();//新增
         new AnimationTimer() {
-//          long time = System.currentTimeMillis();
 
             @Override
             public void handle(long now) {
-/**
- if (System.currentTimeMillis() - time < 1000 / 60) {
- try {
- Thread.sleep(1000 / 60 - (System.currentTimeMillis() - time));
- } catch (Exception e) {
- e.printStackTrace();
- }
- }
- */
-                view.update();//新增
-//                model.update();
-//              time = System.currentTimeMillis();
+                long b = System.currentTimeMillis();
+                model.update();
+                view.update();
+//                System.out.print(String.format("\033[2J"));
+//                System.out.println(System.currentTimeMillis() - b);
+//                System.out.print(String.format("\033[%dA",1)); // Move up
+//                System.out.print("\033[2K");
             }
         }.start();
+
+        view.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, controller);//新增
     }
 
     public static void main(String[] args) {
